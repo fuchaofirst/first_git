@@ -1,21 +1,31 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 # 文件名：server.py
- 
+
+def tcplink(sock,addr):
+    while True:
+       recvStr =  sock.recv(100)
+       print("连接地址：",addr, recvStr)
+       sendStr = "hello world echo"
+       sock.send(sendStr.encode())
+
+
 import socket               # 导入 socket 模块
+import time 
+import threading
 s = socket.socket()         # 创建 socket 对象
 host = socket.gethostname() # 获取本地主机名
 port = 12345                # 设置端口
 s.bind((host, port))        # 绑定端口
  
 s.listen(5)                 # 等待客户端连接
-c,addr = s.accept()     # 建立客户端连接
-while True:
-       recvStr =  c.recv(100)
-       print("连接地址：",addr, recvStr)
-       sendStr = "hello world echo"
-       c.send(sendStr.encode())
-c.close()                # 关闭连接
+while True:  
+    clientsock,clientaddress = s.accept()     # 建立客户端连接
+    print('connect from:',clientaddress)
+    t=threading.Thread(target=tcplink,args=(clientsock,clientaddress))  #t为新创建的线程
+    t.start()
+
+s.close()                # 关闭连接
 
 -------------------------------------------------------------------
 #!/usr/bin/python
@@ -25,8 +35,8 @@ c.close()                # 关闭连接
 import socket               # 导入 socket 模块
 import time  
 s = socket.socket()         # 创建 socket 对象
-host = socket.gethostname() # 获取本地主机名
-port = 12345                # 设置端口号
+host = socket.gethostname() # 获取本地主机名 服务端IP地址
+port = 12345                # 设置端口号 服务端端口号
  
 s.connect((host, port))
 sendStr = "first"
