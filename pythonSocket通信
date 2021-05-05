@@ -1,0 +1,41 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+# 文件名：server.py
+ 
+import socket               # 导入 socket 模块
+s = socket.socket()         # 创建 socket 对象
+host = socket.gethostname() # 获取本地主机名
+port = 12345                # 设置端口
+s.bind((host, port))        # 绑定端口
+ 
+s.listen(5)                 # 等待客户端连接
+c,addr = s.accept()     # 建立客户端连接
+while True:
+       recvStr =  c.recv(100)
+       print("连接地址：",addr, recvStr)
+       sendStr = "hello world echo"
+       c.send(sendStr.encode())
+c.close()                # 关闭连接
+
+-------------------------------------------------------------------
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+# 文件名：client.py
+ 
+import socket               # 导入 socket 模块
+import time  
+s = socket.socket()         # 创建 socket 对象
+host = socket.gethostname() # 获取本地主机名
+port = 12345                # 设置端口号
+ 
+s.connect((host, port))
+sendStr = "first"
+cnt = 0
+while True:
+    s.send(sendStr.encode())
+    recvStr =  s.recv(100)
+    print("clinet has received : ",recvStr)
+    sendStr = str(recvStr) + str(cnt)
+    cnt= cnt +1    
+    time.sleep(1)
+s.close()
