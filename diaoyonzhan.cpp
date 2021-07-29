@@ -63,4 +63,4 @@ int main()
     printf("the g_ps32Result is %d\n", p[100]);
     return 0;
 }
-
+// g++ -o neicun neicun.cpp -g -rdynamic
