@@ -67,7 +67,9 @@ int main(int argc, char** argv)
 }
 ```
 ## map的坑
+```c++
 std::unordered_map<int, int> unorderedMap{{1, 1}, {2, 2}};
 for (const std::pair<int, int>& m : unorderedMap) {
      // 以上代码会编译报错，需要std::pair<const int, int>
 }
+```
