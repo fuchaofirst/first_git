@@ -1,22 +1,6 @@
-# 设计与重构
-## 1 需求分析中要考虑的因素
-1.可行销性   
-2.功能  
-3.性能  
-4.配套需求  
-5.技术（规格）限制  
-6.物理形态  
-7.节能减排 
-8.安全可靠  
-9.成本   
-10.可安装性   
-12.全球化  
-13.资料  
-14.可采购性  
-15.应用环境  
-16.市场竞争  
-17.商业模式   
-# 2 智能指针的析构样例   
+***
+# 智能指针的析构样例   
+>shared_ptr 在默认情况下是不能指向数组的,原因是 shared_ptr 默认的删除器是使用 Delete 对智能指针中的对象进行删除，而 delete 要求 new 时是单一指针 Delete时也应该是指针 new时是数组 delete 也应该用数组类型去delete.
 ``` c++
 #include <windows.h>
 #include <iostream>
@@ -56,25 +40,27 @@ int main(int argc, char** argv)
 	*test = 169;
 	std::cout << *(test.get()) << std::endl;
 	{
-		std::unique_ptr<int, Deleter<int>> ptr(new int[100]);
+	    std::unique_ptr<int, Deleter<int>> ptr(new int[100]);
 	}
 	// 此处需要注意shared_ptr 和unique_ptr在定义析构器时略有不同
 	{
-		std::shared_ptr<int> ptr(new int[100], [](int* ptr) {
-			if (ptr != nullptr) {
-				std::cout << "delete all" << std::endl;
-				delete[]ptr;
-			}
-			});
+	    std::shared_ptr<int> ptr(new int[100], [](int* ptr) {
+	        if (ptr != nullptr) {
+		    std::cout << "delete all" << std::endl;
+		    delete[]ptr;
+		}
+	    });
 	}
 	{
-		std::unique_ptr<int, std::function<void(int*)>> ptr1(new int[100],
-			[](int* p)->void {
-				std::cout << "call my lambda deleter:int[]" << std::endl;
-				delete[]p;
-			}
+	    std::unique_ptr<int, std::function<void(int*)>> ptr1(new int[100],
+	        [](int* p)->void {
+		    std::cout << "call my lambda deleter:int[]" << std::endl;
+		       delete[]p;
+		   }
 		);
 	}
+	//相比与shared_ptr unique_ptr对于动态数组的管理就轻松多了 我们只需要直接使用即可
+        //unique_ptr<int[]>unique(new int[100]);
 	system("pause");
 	return 0;
 }
