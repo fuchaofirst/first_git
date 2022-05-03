@@ -1,5 +1,6 @@
 ***
-# 智能指针的析构样例   
+# C++ 的坑
+## 智能指针的坑
 >shared_ptr 在默认情况下是不能指向数组的,原因是 shared_ptr 默认的删除器是使用 Delete 对智能指针中的对象进行删除，而 delete 要求 new 时是单一指针 Delete时也应该是指针 new时是数组 delete 也应该用数组类型去delete.
 ``` c++
 #include <windows.h>
@@ -65,3 +66,8 @@ int main(int argc, char** argv)
 	return 0;
 }
 ```
+## map的坑
+std::unordered_map<int, int> unorderedMap{{1, 1}, {2, 2}};
+for (const std::pair<int, int>& m : unorderedMap) {
+     // 以上代码会编译报错，需要std::pair<const int, int>
+}
