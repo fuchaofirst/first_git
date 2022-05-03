@@ -17,7 +17,7 @@
 16.市场竞争  
 17.商业模式   
 # 2 智能指针的析构样例   
-'''
+``` c++
 #include <windows.h>
 #include <iostream>
 #include <sstream>
@@ -47,6 +47,7 @@ public:
 
 
 };
+//但是每个智能指针都写一个类是不是好烦？  
 int main(int argc, char** argv)
 {
 	std::unique_ptr<int> test(new int(29));
@@ -57,6 +58,7 @@ int main(int argc, char** argv)
 	{
 		std::unique_ptr<int, Deleter<int>> ptr(new int[100]);
 	}
+	// 此处需要注意shared_ptr 和unique_ptr在定义析构器时略有不同
 	{
 		std::shared_ptr<int> ptr(new int[100], [](int* ptr) {
 			if (ptr != nullptr) {
@@ -76,4 +78,4 @@ int main(int argc, char** argv)
 	system("pause");
 	return 0;
 }
-  '''
+```
