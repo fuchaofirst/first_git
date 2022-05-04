@@ -73,3 +73,17 @@ for (const std::pair<int, int>& m : unorderedMap) {
      // 以上代码会编译报错，需要std::pair<const int, int>
 }
 ```
+## spdlog学习
+### 调用关系
+```c++
+spdlog::info("Welcome to spdlog version {}.{}.{}  !", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);  
+//执行上述命令后会调用内联模板函数
+template<typename... Args>
+inline void info(format_string_t<Args...> fmt, Args &&... args)
+{
+    default_logger_raw()->info(fmt, std::forward<Args>(args)...);
+}
+
+template<typename... Args>
+using format_string_t = fmt::format_string<Args...>; // g
+```
